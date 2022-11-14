@@ -24,7 +24,7 @@ class Player(sprite.Sprite):
         self.y_speed = 0  # скорость вертикального перемещения
         self.onGround = False  # На земле ли я?
 
-    def update(self, left, right, up):
+    def update(self, left, right, up, platforms):
         if up:
             if self.onGround:  # прыгаем, только когда можем оттолкнуться от земли
                 self.y_speed = -JUMP_POWER
@@ -45,5 +45,21 @@ class Player(sprite.Sprite):
 
         self.rect.x += self.x_speed  # переносим свои положение на x_speed
 
-    def draw(self, screen):  # Выводим себя на экран
-        screen.blit(self.image, (self.rect.x, self.rect.y))
+    def collide(self, x_speed, y_speed, platforms):
+        for p in platforms:
+            if sprite.collide_rect(self, p):  # если есть пересечение платформы с игроком
+
+                if x_speed > 0:  # если движется вправо
+                    self.rect.right = p.rect.left  # то не движется вправо
+
+                if x_speed < 0:  # если движется влево
+                    self.rect.left = p.rect.right  # то не движется влево
+
+                if y_speed > 0:  # если падает вниз
+                    self.rect.bottom = p.rect.top  # то не падает вниз
+                    self.onGround = True  # и становится на что-то твердое
+                    self.y_speed = 0  # и энергия падения пропадает
+
+                if y_speed < 0:  # если движется вверх
+                    self.rect.top = p.rect.bottom  # то не движется вверх
+                    self.y_speed = 0  # и энергия прыжка пропадает

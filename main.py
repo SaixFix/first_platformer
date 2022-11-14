@@ -63,7 +63,7 @@ def main():
                 raise SystemExit, "QUIT"
         screen.blit(bg, (0, 0))  # Каждую итерацию необходимо всё перерисовывать
 
-        hero.update(left, right, up)  # передвижение
+        hero.update(left, right, up, platforms)  # передвижение
         entities.draw(screen)  # отображение всего
 
 
