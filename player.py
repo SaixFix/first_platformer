@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import pyganim as pyganim
 from pygame import *
+
+from constants import ANIMATION_RIGHT, ANIMATION_LEFT, ANIMATION_STAY, ANIMATION_JUMP_RIGHT, ANIMATION_JUMP, \
+    ANIMATION_JUMP_LEFT
 
 MOVE_SPEED = 7
 WIDTH = 22
@@ -23,6 +26,27 @@ class Player(sprite.Sprite):
         self.rect = Rect(x, y, WIDTH, HEIGHT)  # прямоугольный объект
         self.y_speed = 0  # скорость вертикального перемещения
         self.onGround = False  # На земле ли я?
+
+        self.image.set_colorkey(Color(COLOR))  # делаем фон прозрачным
+        #        Анимация движения вправо
+        self.boltAnimRight = pyganim.PygAnimation(ANIMATION_RIGHT)
+        self.boltAnimRight.play()
+        #        Анимация движения влево
+        self.boltAnimLeft = pyganim.PygAnimation(ANIMATION_LEFT)
+        self.boltAnimLeft.play()
+
+        self.boltAnimStay = pyganim.PygAnimation(ANIMATION_STAY)
+        self.boltAnimStay.play()
+        self.boltAnimStay.blit(self.image, (0, 0))  # По-умолчанию, стоим
+
+        self.boltAnimJumpLeft = pyganim.PygAnimation(ANIMATION_JUMP_LEFT)
+        self.boltAnimJumpLeft.play()
+
+        self.boltAnimJumpRight = pyganim.PygAnimation(ANIMATION_JUMP_RIGHT)
+        self.boltAnimJumpRight.play()
+
+        self.boltAnimJump = pyganim.PygAnimation(ANIMATION_JUMP)
+        self.boltAnimJump.play()
 
     def update(self, left, right, up, platforms):
         if up:
@@ -46,6 +70,9 @@ class Player(sprite.Sprite):
 
         self.rect.x += self.x_speed  # переносим свои положение на x_speed
         self.collide(self.x_speed, 0, platforms)
+
+
+
 
     def collide(self, x_speed, y_speed, platforms):
         for p in platforms:
