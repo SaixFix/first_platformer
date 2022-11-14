@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+PATCH_BLOCKS = "blocks/platform.png"
+
 
 # Объявляем переменные
 WIN_WIDTH = 800  # Ширина создаваемого окна
