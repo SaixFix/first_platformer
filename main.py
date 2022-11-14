@@ -3,7 +3,6 @@
 import pygame
 from blocks import Platform
 from pygame import *
-
 from constants import DISPLAY, WIN_WIDTH, WIN_HEIGHT, BACKGROUND_COLOR, LIMIT_FPS, level, PLATFORM_WIDTH, \
     PLATFORM_HEIGHT, PLATFORM_COLOR
 from player import Player

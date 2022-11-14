@@ -47,13 +47,13 @@ PLATFORM_COLOR = "#FF6262"
 
 #Константы анимации героя
 ANIMATION_DELAY = 0.1 # скорость смены кадров
-ANIMATION_RIGHT = 'knight/Run.gif'
+ANIMATION_RIGHT = 'knight/__Run.gif'
 
 ANIMATION_LEFT = 'knight/__Run_Left.gif'
 
-ANIMATION_JUMP_LEFT = [('knight/__Jump_left.gif', 0.1)]
-ANIMATION_JUMP_RIGHT = [('knight/__Jump.gif', 0.1)]
-ANIMATION_JUMP = [('knight/__Jump.gif', 0.1)]
-ANIMATION_STAY = [('knight/__Idle.gif', 0.1)]
+ANIMATION_JUMP_LEFT = 'knight/__Jump_left.gif'
+ANIMATION_JUMP_RIGHT = 'knight/__Jump.gif'
+ANIMATION_JUMP = 'knight/__Jump.gif'
+ANIMATION_STAY = 'knight/__Idle.gif'
 
 

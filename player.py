@@ -3,6 +3,7 @@
 import pyganim as pyganim
 from pygame import *
 
+
 from constants import ANIMATION_RIGHT, ANIMATION_LEFT, ANIMATION_STAY, ANIMATION_JUMP_RIGHT, ANIMATION_JUMP, \
     ANIMATION_JUMP_LEFT
 
