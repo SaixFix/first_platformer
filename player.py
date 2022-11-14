@@ -42,8 +42,10 @@ class Player(sprite.Sprite):
 
         self.onGround = False;  # Мы не знаем, когда мы на земле((
         self.rect.y += self.y_speed
+        self.collide(0, self.y_speed, platforms)
 
         self.rect.x += self.x_speed  # переносим свои положение на x_speed
+        self.collide(self.x_speed, 0, platforms)
 
     def collide(self, x_speed, y_speed, platforms):
         for p in platforms:
