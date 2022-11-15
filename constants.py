@@ -50,7 +50,7 @@ PLATFORM_HEIGHT = 32
 PLATFORM_COLOR = "#FF6262"
 
 #Константы анимации героя
-ANIMATION_DELAY = 1 # скорость смены кадров
+ANIMATION_DELAY = 50 # скорость смены кадров
 ANIMATION_RIGHT = [('knight/r1.png'),
             ('knight/r2.png'),
             ('knight/r3.png'),
