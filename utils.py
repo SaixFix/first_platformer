@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from pygame import Rect
 
-
 from constants import WIN_WIDTH, WIN_HEIGHT
 
 

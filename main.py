@@ -22,6 +22,7 @@ def main():
     hero = Player(100, 700)  # создаем героя по (x,y) координатам
     left = right = False  # по умолчанию — стоим
     up = False
+    running = False
 
     entities = pygame.sprite.Group()  # Все объекты
     platforms = []  # то, во что мы будем врезаться или опираться
@@ -54,6 +55,8 @@ def main():
                 left = True
             if e.type == KEYDOWN and e.key == K_RIGHT:
                 right = True
+            if e.type == KEYDOWN and e.key == K_LSHIFT:
+                running = True
 
             if e.type == KEYUP and e.key == K_RIGHT:
                 right = False
@@ -65,6 +68,8 @@ def main():
 
             if e.type == KEYUP and e.key == K_UP:
                 up = False
+            if e.type == KEYUP and e.key == K_LSHIFT:
+                running = False
 
             if e.type == QUIT:
                 raise SystemExit, "QUIT"
@@ -72,7 +77,7 @@ def main():
         screen.blit(bg, (0, 0))  # Каждую итерацию необходимо всё перерисовывать
 
         camera.update(hero) # центризируем камеру относительно персонажа
-        hero.update(left, right, up, platforms)  # передвижение
+        hero.update(left, right, up, running, platforms)  # передвижение
         for e in entities:
             screen.blit(e.image, camera.apply(e))  # отображение всего
 

@@ -4,7 +4,8 @@ import pyganim as pyganim
 from pygame import *
 
 from constants import ANIMATION_RIGHT, ANIMATION_LEFT, ANIMATION_STAY, ANIMATION_JUMP_RIGHT, ANIMATION_JUMP, \
-    ANIMATION_JUMP_LEFT, ANIMATION_DELAY, WIN_WIDTH, WIN_HEIGHT
+    ANIMATION_JUMP_LEFT, ANIMATION_DELAY, WIN_WIDTH, WIN_HEIGHT, ANIMATION_SUPER_SPEED_DELAY, JUMP_EXTRA_POWER, \
+    MOVE_EXTRA_SPEED
 
 MOVE_SPEED = 7
 WIDTH = 22
@@ -30,16 +31,24 @@ class Player(sprite.Sprite):
         self.image.set_colorkey(Color(COLOR))  # делаем фон прозрачным
         #        Анимация движения вправо
         boltAnim = []
+        boltAnimSuperSpeed = []
         for anim in ANIMATION_RIGHT:
             boltAnim.append((anim, ANIMATION_DELAY))
+            boltAnimSuperSpeed.append((anim, ANIMATION_SUPER_SPEED_DELAY))
         self.boltAnimRight = pyganim.PygAnimation(boltAnim)
         self.boltAnimRight.play()
+        self.boltAnimRightSuperSpeed = pyganim.PygAnimation(boltAnimSuperSpeed)
+        self.boltAnimRightSuperSpeed.play()
         #        Анимация движения влево
         boltAnim = []
+        boltAnimSuperSpeed = []
         for anim in ANIMATION_LEFT:
             boltAnim.append((anim, ANIMATION_DELAY))
+            boltAnimSuperSpeed.append((anim, ANIMATION_SUPER_SPEED_DELAY))
         self.boltAnimLeft = pyganim.PygAnimation(boltAnim)
         self.boltAnimLeft.play()
+        self.boltAnimLeftSuperSpeed = pyganim.PygAnimation(boltAnimSuperSpeed)
+        self.boltAnimLeftSuperSpeed.play()
 
         self.boltAnimStay = pyganim.PygAnimation(ANIMATION_STAY)
         self.boltAnimStay.play()
@@ -54,29 +63,41 @@ class Player(sprite.Sprite):
         self.boltAnimJump = pyganim.PygAnimation(ANIMATION_JUMP)
         self.boltAnimJump.play()
 
-    def update(self, left, right, up, platforms):
+    def update(self, left, right, up, running, platforms):
 
         if up:
             if self.onGround:  # прыгаем, только когда можем оттолкнуться от земли
                 self.y_speed = -JUMP_POWER
-            self.image.fill(Color(COLOR))
-            self.boltAnimJump.blit(self.image, (0, 0))
+                if running and (left or right):  # если есть ускорение и мы движемся
+                    self.y_speed -= JUMP_EXTRA_POWER  # то прыгаем выше
+                self.image.fill(Color(COLOR))
+                self.boltAnimJump.blit(self.image, (0, 0))
 
         if left:
             self.x_speed = -MOVE_SPEED  # Лево = x- n
             self.image.fill(Color(COLOR))
-            if up:  # для прыжка влево есть отдельная анимация
-                self.boltAnimJumpLeft.blit(self.image, (0, 0))
-            else:
-                self.boltAnimLeft.blit(self.image, (0, 0))
+            if running:  # если усkорение
+                self.x_speed -= MOVE_EXTRA_SPEED  # то передвигаемся быстрее
+                if not up:  # и если не прыгаем
+                    self.boltAnimLeftSuperSpeed.blit(self.image, (0, 0))  # то отображаем быструю анимацию
+            else:  # если не бежим
+                if not up:  # и не прыгаем
+                    self.boltAnimLeft.blit(self.image, (0, 0))  # отображаем анимацию движения
+            if up:  # если же прыгаем
+                self.boltAnimJumpLeft.blit(self.image, (0, 0))  # отображаем анимацию прыжка
 
         if right:
             self.x_speed = MOVE_SPEED  # Право = x + n
             self.image.fill(Color(COLOR))
+            if running:
+                self.x_speed += MOVE_EXTRA_SPEED
+                if not up:
+                    self.boltAnimRightSuperSpeed.blit(self.image, (0, 0))
+            else:
+                if not up:
+                    self.boltAnimRight.blit(self.image, (0, 0))
             if up:
                 self.boltAnimJumpRight.blit(self.image, (0, 0))
-            else:
-                self.boltAnimRight.blit(self.image, (0, 0))
 
         if not (left or right):  # стоим, когда нет указаний идти
             self.x_speed = 0
