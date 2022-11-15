@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import pyganim as pyganim
 from pygame import *
+import blocks
 
 from constants import ANIMATION_RIGHT, ANIMATION_LEFT, ANIMATION_STAY, ANIMATION_JUMP_RIGHT, ANIMATION_JUMP, \
     ANIMATION_JUMP_LEFT, ANIMATION_DELAY, WIN_WIDTH, WIN_HEIGHT, ANIMATION_SUPER_SPEED_DELAY, JUMP_EXTRA_POWER, \
@@ -118,6 +119,11 @@ class Player(sprite.Sprite):
     def collide(self, x_speed, y_speed, platforms):
         for p in platforms:
             if sprite.collide_rect(self, p):  # если есть пересечение платформы с игроком
+                if isinstance(p, blocks.BlockDie):  # если пересакаемый блок - blocks.BlockDie
+                    self.die()  # умираем
+
+                elif isinstance(p, blocks.BlockTeleport):
+                    self.teleporting(p.goX, p.goY)
 
                 if x_speed > 0:  # если движется вправо
                     self.rect.right = p.rect.left  # то не движется вправо
@@ -134,3 +140,10 @@ class Player(sprite.Sprite):
                     self.rect.top = p.rect.bottom  # то не движется вверх
                     self.y_speed = 0  # и энергия прыжка пропадает
 
+    def die(self):
+        time.wait(500)
+        self.teleporting(self.startX, self.startY)  # перемещаемся в начальные координаты
+
+    def teleporting(self, goX, goY):
+        self.rect.x = goX
+        self.rect.y = goY

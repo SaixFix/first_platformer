@@ -1,14 +1,18 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-PATCH_BLOCKS = "blocks/platform.png"
+import os
+
+
+
 
 
 # Объявляем переменные
 WIN_WIDTH = 1024  # Ширина создаваемого окна
 WIN_HEIGHT = 768  # Высота
 DISPLAY = (WIN_WIDTH, WIN_HEIGHT)  # Группируем ширину и высоту в одну переменную
-BACKGROUND_COLOR = "#004400"
+BACKGROUND_COLOR = "#000000"
+ICON_DIR = os.path.dirname(__file__) #  Полный путь к каталогу с файлами
 
 LIMIT_FPS = 60
 
@@ -21,25 +25,25 @@ level = [
        "----------------------------------",
        "-                                -",
        "-                       --       -",
+       "-        *                       -",
        "-                                -",
        "-            --                  -",
-       "-                                -",
        "--                               -",
        "-                                -",
        "-                   ----     --- -",
        "-                                -",
        "--                               -",
-       "-                                -",
+       "-            *                   -",
        "-                            --- -",
        "-                                -",
        "-                                -",
-       "-      ---                       -",
+       "-  *   ---                  *    -",
        "-                                -",
        "-   -------         ----         -",
        "-                                -",
        "-                         -      -",
        "-                            --  -",
-       "-                                -",
+       "-           ***                  -",
        "-                                -",
        "----------------------------------"]
 
@@ -48,6 +52,12 @@ level = [
 PLATFORM_WIDTH = 32
 PLATFORM_HEIGHT = 32
 PLATFORM_COLOR = "#FF6262"
+
+PATCH_BLOCKS = "blocks/platform.png"
+
+ANIMATION_BLOCKTELEPORT = [
+            ('%s/blocks/portal2.png' % ICON_DIR),
+            ('%s/blocks/portal1.png' % ICON_DIR)]
 
 #Константы героя
 MOVE_EXTRA_SPEED = 2.5 # Ускорение

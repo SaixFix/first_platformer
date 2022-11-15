@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import pygame
-from blocks import Platform
+from blocks import Platform, BlockDie, BlockTeleport
 from pygame import *
 
 from player import Player
@@ -24,10 +24,19 @@ def main():
     up = False
     running = False
 
+
     entities = pygame.sprite.Group()  # Все объекты
+    animatedEntities = pygame.sprite.Group() # все анимированные объекты, за исключением героя
     platforms = []  # то, во что мы будем врезаться или опираться
 
+    tp = BlockTeleport(128, 512, 800, 64)
+    entities.add(tp)
+    platforms.append(tp)
+    animatedEntities.add(tp)
+
     entities.add(hero)
+
+    animatedEntities.update()
 
     timer = pygame.time.Clock()
 
@@ -38,6 +47,11 @@ def main():
                 pf = Platform(x, y)
                 entities.add(pf)
                 platforms.append(pf)
+
+            if col == "*":
+                bd = BlockDie(x, y)
+                entities.add(bd)
+                platforms.append(bd)
 
             x += PLATFORM_WIDTH  # блоки платформы ставятся на ширине блоков
         y += PLATFORM_HEIGHT  # то же самое и с высотой
@@ -83,6 +97,10 @@ def main():
 
 
         pygame.display.update()  # обновление и вывод всех изменений на экран
+
+
+
+
 
 
 if __name__ == "__main__":
