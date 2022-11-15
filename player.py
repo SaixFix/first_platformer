@@ -3,9 +3,8 @@
 import pyganim as pyganim
 from pygame import *
 
-
 from constants import ANIMATION_RIGHT, ANIMATION_LEFT, ANIMATION_STAY, ANIMATION_JUMP_RIGHT, ANIMATION_JUMP, \
-    ANIMATION_JUMP_LEFT, ANIMATION_DELAY
+    ANIMATION_JUMP_LEFT, ANIMATION_DELAY, WIN_WIDTH, WIN_HEIGHT
 
 MOVE_SPEED = 7
 WIDTH = 22
@@ -113,3 +112,4 @@ class Player(sprite.Sprite):
                 if y_speed < 0:  # если движется вверх
                     self.rect.top = p.rect.bottom  # то не движется вверх
                     self.y_speed = 0  # и энергия прыжка пропадает
+

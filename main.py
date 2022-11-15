@@ -3,9 +3,12 @@
 import pygame
 from blocks import Platform
 from pygame import *
+
+from player import Player
+from utils import camera_configure
+from camera import Camera
 from constants import DISPLAY, WIN_WIDTH, WIN_HEIGHT, BACKGROUND_COLOR, LIMIT_FPS, level, PLATFORM_WIDTH, \
     PLATFORM_HEIGHT, PLATFORM_COLOR
-from player import Player
 
 
 def main():
@@ -16,7 +19,7 @@ def main():
     # будем использовать как фон
     bg.fill(Color(BACKGROUND_COLOR))  # Заливаем поверхность сплошным цветом
 
-    hero = Player(55, 55)  # создаем героя по (x,y) координатам
+    hero = Player(100, 700)  # создаем героя по (x,y) координатам
     left = right = False  # по умолчанию — стоим
     up = False
 
@@ -39,6 +42,11 @@ def main():
         y += PLATFORM_HEIGHT  # то же самое и с высотой
         x = 0  # на каждой новой строчке начинаем с нуля
 
+        total_level_width = len(level[0]) * PLATFORM_WIDTH  # Высчитываем фактическую ширину уровня
+        total_level_height = len(level) * PLATFORM_HEIGHT  # высоту
+
+        camera = Camera(camera_configure, total_level_width, total_level_height)
+
     while 1:  # Основной цикл программы
         timer.tick(LIMIT_FPS) #ограничение кол кадров
         for e in pygame.event.get():  # Обрабатываем события
@@ -60,10 +68,13 @@ def main():
 
             if e.type == QUIT:
                 raise SystemExit, "QUIT"
+
         screen.blit(bg, (0, 0))  # Каждую итерацию необходимо всё перерисовывать
 
+        camera.update(hero) # центризируем камеру относительно персонажа
         hero.update(left, right, up, platforms)  # передвижение
-        entities.draw(screen)  # отображение всего
+        for e in entities:
+            screen.blit(e.image, camera.apply(e))  # отображение всего
 
 
         pygame.display.update()  # обновление и вывод всех изменений на экран
