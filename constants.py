@@ -41,7 +41,7 @@ level = [
        "-                                -",
        "-   -------         ----         -",
        "-                                -",
-       "-                         -      -",
+       "-                         -  P   -",
        "-                            --  -",
        "-           ***                  -",
        "-                                -",
@@ -54,10 +54,11 @@ PLATFORM_HEIGHT = 32
 PLATFORM_COLOR = "#FF6262"
 
 PATCH_BLOCKS = "blocks/platform.png"
+ANIMATION_DELAY_TP = 1
 
 ANIMATION_BLOCKTELEPORT = [
-            ('%s/blocks/portal2.png' % ICON_DIR),
-            ('%s/blocks/portal1.png' % ICON_DIR)]
+            ('blocks/portal2.png'),
+            ('blocks/portal1.png')]
 
 #Константы героя
 MOVE_EXTRA_SPEED = 2.5 # Ускорение
@@ -91,5 +92,13 @@ ANIMATION_JUMP_LEFT = [('knight/jump_l.png', 1)]
 ANIMATION_JUMP_RIGHT = [('knight/jump_r.png', 1)]
 ANIMATION_JUMP = [('knight/jump_r.png', 1)]
 ANIMATION_STAY = [('knight/0.png', 1)]
+
+#константы монстров
+MONSTER_WIDTH = 32
+MONSTER_HEIGHT = 32
+MONSTER_COLOR = "#2110FF"
+ICON_DIR = os.path.dirname(__file__) #  Полный путь к каталогу с файлами
+ANIMATION_MONSTERHORYSONTAL = [('%s/monsters/fire1.png' % ICON_DIR),
+                      ('%s/monsters/fire2.png' % ICON_DIR )]
 
 

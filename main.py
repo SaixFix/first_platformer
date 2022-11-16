@@ -1,9 +1,10 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import pygame
-from blocks import Platform, BlockDie, BlockTeleport
+from blocks import Platform, BlockDie, BlockTeleport, Princess
 from pygame import *
 
+from monsters import Monster
 from player import Player
 from utils import camera_configure
 from camera import Camera
@@ -24,10 +25,16 @@ def main():
     up = False
     running = False
 
-
     entities = pygame.sprite.Group()  # Все объекты
-    animatedEntities = pygame.sprite.Group() # все анимированные объекты, за исключением героя
+    animatedEntities = pygame.sprite.Group()  # все анимированные объекты, за исключением героя
+    monsters = pygame.sprite.Group()  # Все передвигающиеся объекты
     platforms = []  # то, во что мы будем врезаться или опираться
+
+    mn = Monster(190, 200, 2, 3, 150, 15)
+    entities.add(mn)
+    platforms.append(mn)
+    monsters.add(mn)
+    monsters.update(platforms)  # передвигаем всех монстров
 
     tp = BlockTeleport(128, 512, 800, 64)
     entities.add(tp)
@@ -53,6 +60,12 @@ def main():
                 entities.add(bd)
                 platforms.append(bd)
 
+            if col == "P":
+                pr = Princess(x, y)
+                entities.add(pr)
+                platforms.append(pr)
+                animatedEntities.add(pr)
+
             x += PLATFORM_WIDTH  # блоки платформы ставятся на ширине блоков
         y += PLATFORM_HEIGHT  # то же самое и с высотой
         x = 0  # на каждой новой строчке начинаем с нуля
@@ -63,7 +76,7 @@ def main():
         camera = Camera(camera_configure, total_level_width, total_level_height)
 
     while 1:  # Основной цикл программы
-        timer.tick(LIMIT_FPS) #ограничение кол кадров
+        timer.tick(LIMIT_FPS)  # ограничение кол кадров
         for e in pygame.event.get():  # Обрабатываем события
             if e.type == KEYDOWN and e.key == K_LEFT:
                 left = True
@@ -90,17 +103,12 @@ def main():
 
         screen.blit(bg, (0, 0))  # Каждую итерацию необходимо всё перерисовывать
 
-        camera.update(hero) # центризируем камеру относительно персонажа
+        camera.update(hero)  # центризируем камеру относительно персонажа
         hero.update(left, right, up, running, platforms)  # передвижение
         for e in entities:
             screen.blit(e.image, camera.apply(e))  # отображение всего
 
-
         pygame.display.update()  # обновление и вывод всех изменений на экран
-
-
-
-
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ import pyganim as pyganim
 from pygame import *
 import blocks
 
+import monsters
 from constants import ANIMATION_RIGHT, ANIMATION_LEFT, ANIMATION_STAY, ANIMATION_JUMP_RIGHT, ANIMATION_JUMP, \
     ANIMATION_JUMP_LEFT, ANIMATION_DELAY, WIN_WIDTH, WIN_HEIGHT, ANIMATION_SUPER_SPEED_DELAY, JUMP_EXTRA_POWER, \
     MOVE_EXTRA_SPEED
@@ -28,6 +29,7 @@ class Player(sprite.Sprite):
         self.rect = Rect(x, y, WIDTH, HEIGHT)  # прямоугольный объект
         self.y_speed = 0  # скорость вертикального перемещения
         self.onGround = False  # На земле ли я?
+        self.winner = False
 
         self.image.set_colorkey(Color(COLOR))  # делаем фон прозрачным
         #        Анимация движения вправо
@@ -119,8 +121,11 @@ class Player(sprite.Sprite):
     def collide(self, x_speed, y_speed, platforms):
         for p in platforms:
             if sprite.collide_rect(self, p):  # если есть пересечение платформы с игроком
-                if isinstance(p, blocks.BlockDie):  # если пересакаемый блок - blocks.BlockDie
+                if isinstance(p, blocks.BlockDie) or isinstance(p, monsters.Monster):  # если пересакаемый блок- blocks.BlockDie или Monster
                     self.die()  # умираем
+
+                elif isinstance(p, blocks.Princess):  # если коснулись принцессы
+                    self.winner = True  # победили!!!
 
                 elif isinstance(p, blocks.BlockTeleport):
                     self.teleporting(p.goX, p.goY)
