@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+
 from pygame import Rect
+
 
 from constants import WIN_WIDTH, WIN_HEIGHT
 
@@ -16,3 +18,4 @@ def camera_configure(camera, target_rect):
     t = min(0, t)  # Не движемся дальше верхней границы
 
     return Rect(l, t, w, h)
+

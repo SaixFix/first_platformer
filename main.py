@@ -4,15 +4,18 @@ import pygame
 from blocks import Platform, BlockDie, BlockTeleport, Princess
 from pygame import *
 
+from loadlevels import LoadLevel
 from monsters import Monster
 from player import Player
 from utils import camera_configure
 from camera import Camera
-from constants import DISPLAY, WIN_WIDTH, WIN_HEIGHT, BACKGROUND_COLOR, LIMIT_FPS, level, PLATFORM_WIDTH, \
+from constants import DISPLAY, WIN_WIDTH, WIN_HEIGHT, BACKGROUND_COLOR, LIMIT_FPS, PLATFORM_WIDTH, \
     PLATFORM_HEIGHT, PLATFORM_COLOR
 
 
 def main():
+    loadlevel = LoadLevel()
+    loadlevel.loadLevel(level, entities, platforms, animatedEntities, monsters, Monster)
     pygame.init()  # Инициация PyGame, обязательная строчка
     screen = pygame.display.set_mode(DISPLAY)  # Создаем окошко
     pygame.display.set_caption("Knight of the moon")  # Пишем в шапку
@@ -20,30 +23,12 @@ def main():
     # будем использовать как фон
     bg.fill(Color(BACKGROUND_COLOR))  # Заливаем поверхность сплошным цветом
 
-    hero = Player(100, 700)  # создаем героя по (x,y) координатам
     left = right = False  # по умолчанию — стоим
     up = False
     running = False
 
-    entities = pygame.sprite.Group()  # Все объекты
-    animatedEntities = pygame.sprite.Group()  # все анимированные объекты, за исключением героя
-    monsters = pygame.sprite.Group()  # Все передвигающиеся объекты
-    platforms = []  # то, во что мы будем врезаться или опираться
-
-    mn = Monster(190, 200, 2, 3, 150, 15)
-    entities.add(mn)
-    platforms.append(mn)
-    monsters.add(mn)
-    monsters.update(platforms)  # передвигаем всех монстров
-
-    tp = BlockTeleport(128, 512, 800, 64)
-    entities.add(tp)
-    platforms.append(tp)
-    animatedEntities.add(tp)
-
+    hero = Player(loadlevel.playerX, loadlevel.playerY)  # создаем героя по (x,y) координатам
     entities.add(hero)
-
-    animatedEntities.update()
 
     timer = pygame.time.Clock()
 
@@ -75,9 +60,13 @@ def main():
 
         camera = Camera(camera_configure, total_level_width, total_level_height)
 
-    while 1:  # Основной цикл программы
-        timer.tick(LIMIT_FPS)  # ограничение кол кадров
+    while not hero.winner:  # Основной цикл программы
+        timer.tick(60)
         for e in pygame.event.get():  # Обрабатываем события
+            if e.type == QUIT:
+                raise SystemExit, "QUIT"
+            if e.type == KEYDOWN and e.key == K_UP:
+                up = True
             if e.type == KEYDOWN and e.key == K_LEFT:
                 left = True
             if e.type == KEYDOWN and e.key == K_RIGHT:
@@ -85,24 +74,17 @@ def main():
             if e.type == KEYDOWN and e.key == K_LSHIFT:
                 running = True
 
+            if e.type == KEYUP and e.key == K_UP:
+                up = False
             if e.type == KEYUP and e.key == K_RIGHT:
                 right = False
             if e.type == KEYUP and e.key == K_LEFT:
                 left = False
 
-            if e.type == KEYDOWN and e.key == K_UP:
-                up = True
-
-            if e.type == KEYUP and e.key == K_UP:
-                up = False
-            if e.type == KEYUP and e.key == K_LSHIFT:
-                running = False
-
-            if e.type == QUIT:
-                raise SystemExit, "QUIT"
-
         screen.blit(bg, (0, 0))  # Каждую итерацию необходимо всё перерисовывать
 
+        animatedEntities.update()  # показываеaм анимацию
+        monsters.update(platforms)  # передвигаем всех монстров
         camera.update(hero)  # центризируем камеру относительно персонажа
         hero.update(left, right, up, running, platforms)  # передвижение
         for e in entities:
@@ -111,5 +93,10 @@ def main():
         pygame.display.update()  # обновление и вывод всех изменений на экран
 
 
+level = []
+entities = pygame.sprite.Group()  # Все объекты
+animatedEntities = pygame.sprite.Group()  # все анимированные объекты, за исключением героя
+monsters = pygame.sprite.Group()  # Все передвигающиеся объекты
+platforms = []  # то, во что мы будем врезаться или опираться
 if __name__ == "__main__":
     main()
