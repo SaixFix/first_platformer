@@ -9,11 +9,12 @@ class Camera(object):
         self.state = Rect(0, 0, width, height)
 
     def apply(self, target):
-        """все объекты рисуются в меньшем прямоугольнике"""
         return target.rect.move(self.state.topleft)
 
     def update(self, target):
-        """Меньший прямоугольник центрируется относительно главного персонажа"""
         self.state = self.camera_func(self.state, target.rect)
+
+    def reverse(self, pos):# получение внутренних координат из глобальных
+        return pos[0] - self.state.left, pos[1] - self.state.top
 
 

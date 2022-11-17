@@ -12,6 +12,8 @@ WIN_WIDTH = 1024  # Ширина создаваемого окна
 WIN_HEIGHT = 768  # Высота
 DISPLAY = (WIN_WIDTH, WIN_HEIGHT)  # Группируем ширину и высоту в одну переменную
 BACKGROUND_COLOR = "#000000"
+CENTER_OF_SCREEN = WIN_WIDTH / 2, WIN_HEIGHT / 2
+
 ICON_DIR = os.path.dirname(__file__) #  Полный путь к каталогу с файлами
 
 LIMIT_FPS = 60
